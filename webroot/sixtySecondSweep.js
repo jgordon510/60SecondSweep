@@ -291,6 +291,10 @@ function update() {
     	scoreTableEnterIntials();
     	break;
     	
+    case "scoreTable":
+    	scoreTableWaitForSpace();
+    	break;
+    	
 	}
 
 	 
@@ -396,6 +400,11 @@ function showBoard()
 	game.world.forEach(function(item) 
 		{
 				item.alpha = 1;
+				if(typeof item.number !== 'undefined')
+				{
+					item.loadTexture('hex' + productList[item.number-1])	
+				}
+				
 		});
 }
 

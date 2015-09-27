@@ -85,9 +85,11 @@ function scoreTableCheck()
         initialInstructions.wordWrap =  true;
         initialInstructions.wordWrapWidth = 700; 
         
+        var letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+        
         for(var i = 0 ; i < 3 ; i++)
         {
-            initialSprites[i] = game.add.text(250+i*150,300,'A')
+            initialSprites[i] = game.add.text(250+i*150,300,letters[initialsEntered[i]])
             initialSprites[i].font = 'Michroma';
             initialSprites[i].fontSize = 96;
             initialSprites[i].fill = '#FFFFFF';
@@ -98,11 +100,18 @@ function scoreTableCheck()
     }
 }
 
+var boardSlotsInitials = []
+var boardSlotsScores = []
 function scoreTableShow ()
 {
-    console.log("displaying scoreboard")
-    var boardSlotsInitials = []
-    var boardSlotsScores = []
+    console.log("displaying scoreboard");
+    game.time.events.add(Phaser.Timer.SECOND * 1.5, scoreTableLoaded);
+    function scoreTableLoaded()
+    {
+        gameState="scoreTable";    
+    }
+    
+
     for(var i = 0 ; i < 10 ; i++)
     {
         boardSlotsInitials[i] = game.add.text(300,40+i*50,scoreTable.initials[i] )
@@ -111,7 +120,7 @@ function scoreTableShow ()
         boardSlotsInitials[i].fill = '#FFFFFF';
         boardSlotsInitials[i].anchor.setTo(0.5,0)
         boardSlotsInitials[i].scale.setTo(0,0)
-        game.add.tween(boardSlotsInitials[i].scale).to( {x:1,y:1}, 800+i*200, Phaser.Easing.Bounce.Out, true);
+        game.add.tween(boardSlotsInitials[i].scale).to( {x:1,y:1}, 800+i*250, Phaser.Easing.Elastic.Out, true);
         
         boardSlotsScores[i] = game.add.text(500,40+i*50,(scoreTable.scores[i]/100).toFixed(2))
         boardSlotsScores[i].font = 'Michroma';
@@ -119,9 +128,8 @@ function scoreTableShow ()
         boardSlotsScores[i].fill = '#FFFFFF';
         boardSlotsScores[i].anchor.setTo(0.5,0)
         boardSlotsScores[i].scale.setTo(0,0)
-        game.add.tween(boardSlotsScores[i].scale).to( {x:1,y:1}, 800+(10-i)*200, Phaser.Easing.Bounce.Out, true);
+        game.add.tween(boardSlotsScores[i].scale).to( {x:1,y:1}, 800+(10-i)*250, Phaser.Easing.Elastic.Out, true);
     }
-    //to do - show scoreboard
 };
 
 var initialKeyPressed = false;
@@ -230,8 +238,8 @@ function scoreTableSave()
     
 function scoreTableClear ()
 {
-    scoreTable.initials = ['JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG']
-    scoreTable.scores = ['5999','5999','5999','5999','5999','5999','5999','5999','5999','5999']
+    scoreTable.initials = ['MRG','JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG']
+    scoreTable.scores = ['2961','5999','5999','5999','5999','5999','5999','5999','5999','5999']
 
    $.ajax({
       url: "https://openws.herokuapp.com/60ss/5606e0438ae3f903004b2000?apiKey=0527e44c67c8d70e86a8e8a77f1e0bbb",
@@ -242,3 +250,44 @@ function scoreTableClear ()
       console.log("Table reset successfully");
     });
 };
+
+function scoreTableWaitForSpace()
+{
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+    {
+        for(var i = 0 ; i < 10 ; i++)
+        {
+            game.world.remove(boardSlotsInitials[i]);
+            game.world.remove(boardSlotsScores[i]);
+        }
+        
+        gameReady = 0;
+        readyTimer = 180;
+        readyCard = 1;
+        gameState="title";
+        startTime = game.time.totalElapsedSeconds() ;
+        currentHex = 1;
+        typedProduct = 0;
+        lastKey = 0;  //this and keyStillDown are used to prevent keypresses over
+        keyStillDown = 0; //multiple cycles
+        factorSlot1 = 0;
+        factorSlot2 = 0;
+        emptySlot = 1;
+        //these are needed in order to validate the double factor pair hexes in the
+        //middle row
+        oldFactor1 = 0;
+        oldFactor2 = 0;
+        lastGood1 = 0;
+        lastGood2 = 0;
+        rotationSlowness = 10;
+        rotationFrame = 0;
+        playerWin = 0;
+        endGameDone = false;
+        timerText.fill = "green"
+        //necessary for scoreTable
+        initialKeyPressed = false;
+        newTopSpot = null;
+        console.log("new startTime: " + startTime)
+        startGame();
+    }
+}
