@@ -110,16 +110,16 @@ function scoreTableShow ()
         boardSlotsInitials[i].fontSize = 42;
         boardSlotsInitials[i].fill = '#FFFFFF';
         boardSlotsInitials[i].anchor.setTo(0.5,0)
-        boardSlotsInitials[i].alpha = 0
-        game.add.tween(boardSlotsInitials[i]).to( { alpha:1 }, 800+i*200, Phaser.Easing.Linear.Out, true);
+        boardSlotsInitials[i].scale.setTo(0,0)
+        game.add.tween(boardSlotsInitials[i].scale).to( {x:1,y:1}, 800+i*200, Phaser.Easing.Bounce.Out, true);
         
         boardSlotsScores[i] = game.add.text(500,40+i*50,(scoreTable.scores[i]/100).toFixed(2))
         boardSlotsScores[i].font = 'Michroma';
         boardSlotsScores[i].fontSize = 42;
         boardSlotsScores[i].fill = '#FFFFFF';
         boardSlotsScores[i].anchor.setTo(0.5,0)
-        boardSlotsScores[i].alpha = 0
-        game.add.tween(boardSlotsScores[i]).to( { alpha:1 }, 800+(10-i)*200, Phaser.Easing.Linear.Out, true);
+        boardSlotsScores[i].scale.setTo(0,0)
+        game.add.tween(boardSlotsScores[i].scale).to( {x:1,y:1}, 800+(10-i)*200, Phaser.Easing.Bounce.Out, true);
     }
     //to do - show scoreboard
 };
