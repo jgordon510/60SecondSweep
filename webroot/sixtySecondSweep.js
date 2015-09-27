@@ -601,7 +601,8 @@ function checkWin()
 
 function endGameDelay()
 {
-	game.time.events.add(Phaser.Timer.SECOND * 0.5, endGameMessage);
+	gameState = "endGameTitle"
+	game.time.events.add(Phaser.Timer.SECOND * 1, endGameMessage);
 }
 
 //shows the correct display starting with "YOU" and then "WIN!" or "LOSE!"

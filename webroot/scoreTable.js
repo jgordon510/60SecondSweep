@@ -110,12 +110,16 @@ function scoreTableShow ()
         boardSlotsInitials[i].fontSize = 42;
         boardSlotsInitials[i].fill = '#FFFFFF';
         boardSlotsInitials[i].anchor.setTo(0.5,0)
+        boardSlotsInitials[i].alpha = 0
+        game.add.tween(boardSlotsInitials[i]).to( { alpha:1 }, 800+i*200, Phaser.Easing.Linear.Out, true);
         
         boardSlotsScores[i] = game.add.text(500,40+i*50,(scoreTable.scores[i]/100).toFixed(2))
         boardSlotsScores[i].font = 'Michroma';
         boardSlotsScores[i].fontSize = 42;
         boardSlotsScores[i].fill = '#FFFFFF';
         boardSlotsScores[i].anchor.setTo(0.5,0)
+        boardSlotsScores[i].alpha = 0
+        game.add.tween(boardSlotsScores[i]).to( { alpha:1 }, 800+(10-i)*200, Phaser.Easing.Linear.Out, true);
     }
     //to do - show scoreboard
 };
@@ -229,7 +233,6 @@ function scoreTableClear ()
     scoreTable.initials = ['JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG','JBG']
     scoreTable.scores = ['5999','5999','5999','5999','5999','5999','5999','5999','5999','5999']
 
-  // Saving in a collection called "my_test_collection"
    $.ajax({
       url: "https://openws.herokuapp.com/60ss/5606e0438ae3f903004b2000?apiKey=0527e44c67c8d70e86a8e8a77f1e0bbb",
       type: "PUT",
@@ -237,8 +240,5 @@ function scoreTableClear ()
     })
     .done(function(data) {
       console.log("Table reset successfully");
-    //   console.log(data[0]._id);   // 547ba6d00b07515f0d4b6c62
-    //   console.log(data[0].name);  // Laptop
-    //   console.log(data[0].price); // 2000
     });
 };
