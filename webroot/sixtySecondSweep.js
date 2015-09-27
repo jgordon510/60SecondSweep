@@ -3,6 +3,9 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game', { preload: preload, cr
 
 
  function preload() {
+ 	//  Load the Google WebFont Loader script
+    game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+    
  	//background
  	game.load.image("background", "assets/stars.png");
  	
@@ -241,6 +244,7 @@ var lastGood2 = 0;
 var rotationSlowness = 10;
 var rotationFrame = 0;
 var timeLeft;
+var score;
 
 var yellowStyle = {font:"bold 200px Arial", fill:"yellow"};
 var redStyle = {font:"bold 200px Arial", fill:"red"};
@@ -280,7 +284,11 @@ function update() {
         break;
         
     case "endGame":
-    	endGame();
+    	endGameDelay();
+    	break;
+    	
+    case "enteringInitials":
+    	scoreTableEnterIntials();
     	break;
     	
 	}
@@ -406,6 +414,7 @@ function timerBehaviour()
 {
 	//display the time left to the game
 	timeLeft = startTime + 60-Math.round(game.time.totalElapsedSeconds()  );
+	score = 6000-Math.round((startTime+60-game.time.totalElapsedSeconds())*100);
 	timerText.setText(timeLeft ) ;
 	
 	//change color if the user is running out of time	
@@ -589,24 +598,28 @@ function checkWin()
 	}
 }
 
-//shows the correct display starting with "YOU" and then "WIN!" or "LOSE!"
-var endGameDelay = 100;
-function endGame()
+
+function endGameDelay()
 {
-	if(endGameDelay>0)
+	game.time.events.add(Phaser.Timer.SECOND * 0.5, endGameMessage);
+}
+
+//shows the correct display starting with "YOU" and then "WIN!" or "LOSE!"
+var endGameDone = false;
+function endGameMessage()
+{
+	if(endGameDone == false)
 	{
-		endGameDelay--;
-	} else
-	{
-		if(playerWin==1)
+		endGameDone=true;
+		if(playerWin==1 )
 		{
 			gameDisplay.loadTexture('endWin', 0);
+			game.time.events.add(Phaser.Timer.SECOND * 1.5, scoreTableCheck);
 		} else
 		{
 			gameDisplay.loadTexture('endLose', 0);
-
+			game.time.events.add(Phaser.Timer.SECOND * 1.5, scoreTableCheck);
 		}
-		
 	}
 	
 }
